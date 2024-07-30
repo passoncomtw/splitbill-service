@@ -1,14 +1,10 @@
 from flask import Flask, request
 from flask_restful import Resource, Api
-from flask_sqlalchemy import SQLAlchemy
-import settings
+from database import initalDatabase
 
 app = Flask(__name__)
 
-app.config["SQLALCHEMY_DATABASE_URI"] = settings.SQLALCHEMY_DATABASE_URI
-
-# # app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////tmp/test.db'
-db = SQLAlchemy(app)
+db = initalDatabase(app)
 
 api = Api(app)
 api.prefix = '/api'
