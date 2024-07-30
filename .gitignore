@@ -1,2 +1,5 @@
 node_modules/
 dbdata
+
+# Python 
+__pycache__
