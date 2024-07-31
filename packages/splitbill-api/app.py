@@ -1,6 +1,5 @@
 from flask import Flask, request
-from flask_restful import Resource, Api
-from database import initalDatabase
+from flask_restful import Resource, Api, marshal_with, fields
 
 app = Flask(__name__)
 
@@ -15,9 +14,15 @@ fakeDatabase = {
   3:{'name':'Start stream'},
 }
 
+taskFields = {
+    'id':fields.Integer,
+    'name':fields.String,
+ }
+
 class Items(Resource):
   def get(self):
     return fakeDatabase
+  @marshal_with(taskFields)
   def post(self):
     data = request.json
     itemId = len(fakeDatabase.keys()) + 1
@@ -25,12 +30,15 @@ class Items(Resource):
     return fakeDatabase
 
 class Item(Resource):
+  @marshal_with(taskFields)
   def get(self, pk):
     return fakeDatabase[pk]
+  @marshal_with(taskFields)
   def put(self, pk):
     data = request.json
     fakeDatabase[pk]['name'] = data['name']
     return fakeDatabase
+  @marshal_with(taskFields)
   def delete(self, pk):
     del fakeDatabase[pk]
     return fakeDatabase
