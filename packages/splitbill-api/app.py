@@ -6,7 +6,7 @@ api = Api(
     app, version="0.0", title="Split bill API", description="拆帳系統 API", doc="/doc"
 )
 
-todo = Namespace("To Do")
+todo_api = Namespace("To Do")
 
 
 class To_Do_Store:
@@ -61,12 +61,12 @@ todo_model = api.model(
 )
 
 
-@todo.route("")
+@todo_api.route("")
 class To_Do_List(Resource):
     def get(self):
         return todo_store.get_all()
 
-    @todo.expect(todo_model)
+    @todo_api.expect(todo_model)
     def post(self):
         todo = todo_store.create(name=api.payload["name"])
 
@@ -76,8 +76,8 @@ class To_Do_List(Resource):
         return todo
 
 
-@todo.route("/<int:id>")
-@todo.response(404, "Todo not found")
+@todo_api.route("/<int:id>")
+@todo_api.response(404, "Todo not found")
 class To_Do(Resource):
     def get(self, id):
         todo = todo_store.get(id)
@@ -91,9 +91,9 @@ class To_Do(Resource):
         todo_store.delete(id)
         return "", 204
 
-    @todo.expect(todo_model)
+    @todo_api.expect(todo_model)
     def put(self, id):
-        todo = todo_store.update(id=id, name=api.payload["name"])
+        todo = todo_store.update(id=id, name=todo_api.payload["name"])
 
         if todo is None:
             return "Todo not found", 404
@@ -101,7 +101,7 @@ class To_Do(Resource):
         return todo
 
 
-api.add_namespace(todo, "/todos")
+api.add_namespace(todo_api, "/todos")
 
 
 @app.cli.command()
