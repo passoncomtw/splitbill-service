@@ -5,7 +5,7 @@ on:
     types: 
     - closed
     branches:
-    - main
+    - develop
     paths:
     - 'packages/splitbill-api/**'
     - '.github/workflows/build-and-deploy-splitbill-api-prod.yaml'
