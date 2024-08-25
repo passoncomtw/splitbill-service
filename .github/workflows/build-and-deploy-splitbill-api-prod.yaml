@@ -8,6 +8,7 @@ on:
     - develop
     paths:
     - 'packages/splitbill-api/**'
+    - '.github/actions/**'
     - '.github/workflows/build-and-deploy-splitbill-api-prod.yaml'
 
 env:
