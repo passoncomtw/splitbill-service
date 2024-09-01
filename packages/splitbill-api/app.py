@@ -1,8 +1,9 @@
 from flask import Flask, jsonify
 from flask_restx import Api, Resource, Namespace, fields
 from typing import List
-from models import db
+from models import db, migrate, users, groups, group_users, transactions
 from models.users import Users, User_Scheme, Users_Scheme_Adapter
+
 
 app = Flask(__name__)
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
@@ -11,10 +12,7 @@ app.config["SQLALCHEMY_DATABASE_URI"] = (
 )
 
 db.init_app(app)
-
-with app.app_context():
-    db.Model.metadata.reflect(bind=db.engines[None].connect())
-
+migrate.init_app(app, db)
 
 api = Api(
     app, version="0.0", title="Split bill API", description="拆帳系統 API", doc="/doc"

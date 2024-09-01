@@ -1,6 +1,6 @@
 from models import db
 from sqlalchemy import Column, Integer, String
-from pydantic import BaseModel, ConfigDict,TypeAdapter
+from pydantic import BaseModel, ConfigDict, TypeAdapter
 from typing import List
 
 
@@ -12,13 +12,17 @@ class Users(db.Model):
     line_id = Column(String, nullable=False)
     user_tag = Column(String, nullable=False)
 
-    def __init__(self, name, line_id , user_tag):
+    groups = db.relationship("Group_Users", backref="users")
+    transactions = db.relationship("Transactions", backref="users")
+    
+    def __init__(self, name, line_id, user_tag):
         self.name = name
         self.line_id = line_id
         self.user_tag = user_tag
-        
+
     def __repr__(self):
         return "<User %r>" % self.name
+
 
 # Pydantic models
 class User_Scheme(BaseModel):
@@ -27,6 +31,6 @@ class User_Scheme(BaseModel):
     name: str
     line_id: str
     user_tag: str
-    
-    
+
+
 Users_Scheme_Adapter = TypeAdapter(List[User_Scheme])
