@@ -1,107 +1,93 @@
-from flask import Flask
+from flask import Flask, jsonify
 from flask_restx import Api, Resource, Namespace, fields
+from typing import List
+from models import db
+from models.users import Users, User_Scheme, Users_Scheme_Adapter
 
 app = Flask(__name__)
+app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
+app.config["SQLALCHEMY_DATABASE_URI"] = (
+    "postgresql://admin:123456@127.0.0.1:5436/splitbill_database"
+)
+
+db.init_app(app)
+
+with app.app_context():
+    db.Model.metadata.reflect(bind=db.engines[None].connect())
+
+
 api = Api(
     app, version="0.0", title="Split bill API", description="拆帳系統 API", doc="/doc"
 )
 
-todo_api = Namespace("To Do")
+users_api = Namespace("Users")
 
-
-class To_Do_Store:
-    def __init__(self):
-        self.__list = []
-        self.__last_id = 0
-
-    def get_all(self):
-        return self.__list
-
-    def get(self, id):
-        for todo in self.__list:
-            if todo["id"] == id:
-                return todo
-
-        return None
-
-    def create(self, *, name):
-        self.__last_id += 1
-        new_todo = {"id": self.__last_id + 1, "name": name}
-
-        self.__list.append(new_todo)
-        return new_todo
-
-    def update(self, *, id, name):
-        todo = self.get(id)
-
-        if todo is None:
-            return None
-
-        todo.update({"id": id, "name": name})
-        return todo
-
-    def delete(self, id):
-        todo = self.get(id)
-        self.__list.remove(todo)
-
-
-todo_store = To_Do_Store()
-
-todo_store.create(name="todo 1")
-todo_store.create(name="todo 2")
-todo_store.create(name="todo 3")
-
-
-todo_model = api.model(
-    "Todo",
+users_model = api.model(
+    "Users",
     {
         "id": fields.Integer(readonly=True, description="The task unique identifier"),
         "name": fields.String(required=True, description="The task details"),
+        "line_id": fields.String(required=True, description="The task details"),
+        "user_tag": fields.String(required=True, description="The task details"),
     },
 )
 
 
-@todo_api.route("")
-class To_Do_List(Resource):
+@users_api.route("")
+class User_List(Resource):
     def get(self):
-        return todo_store.get_all()
+        users = Users.query.all()
 
-    @todo_api.expect(todo_model)
+        user_list = Users_Scheme_Adapter.dump_python(users)
+
+        return user_list
+
+    @users_api.expect(users_model)
     def post(self):
-        todo = todo_store.create(name=api.payload["name"])
+        name = users_api.payload["name"]
+        line_id = users_api.payload["line_id"]
+        user_tag = users_api.payload["user_tag"]
 
-        if todo is None:
-            return "Todo not found", 404
+        id = None
+        last_user = Users.query.order_by(Users.id.desc()).first()
 
-        return todo
+        if last_user is None:
+            id = 1
+        else:
+            id = last_user.id + 1
+
+        new_user = Users(name=name, line_id=line_id, user_tag=user_tag)
+
+        db.session.add(new_user)
+        db.session.commit()
+
+        return "create user success", 200
 
 
-@todo_api.route("/<int:id>")
-@todo_api.response(404, "Todo not found")
-class To_Do(Resource):
+@users_api.route("/<int:id>")
+@users_api.response(404, "User not found")
+class User(Resource):
     def get(self, id):
-        todo = todo_store.get(id)
+        user = Users.query.get(id)
+        user_dict = User_Scheme.model_validate(user).model_dump()
 
-        if todo is None:
-            return "Todo not found", 404
+        return user_dict
 
-        return todo
+    # def delete(self, id):
+    #     todo_store.delete(id)
+    #     return "", 204
 
-    def delete(self, id):
-        todo_store.delete(id)
-        return "", 204
+    # @users_api.expect(todo_model)
+    # def put(self, id):
+    #     todo = todo_store.update(id=id, name=users_api.payload["name"])
 
-    @todo_api.expect(todo_model)
-    def put(self, id):
-        todo = todo_store.update(id=id, name=todo_api.payload["name"])
+    #     if todo is None:
+    #         return "Todo not found", 404
 
-        if todo is None:
-            return "Todo not found", 404
-
-        return todo
+    #     return todo
 
 
-api.add_namespace(todo_api, "/todos")
+api.add_namespace(users_api, "/users")
 
 
 @app.cli.command()
