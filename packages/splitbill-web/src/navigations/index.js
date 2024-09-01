@@ -11,17 +11,6 @@ import { fakeAuthProvider } from "../constants/auth";
 export function Layout() {
   return (
     <div>
-      <AuthStatus />
-
-      <ul>
-        <li>
-          <Link to="/">Public Page</Link>
-        </li>
-        <li>
-          <Link to="/protected">Protected Page</Link>
-        </li>
-      </ul>
-
       <Outlet />
     </div>
   );
@@ -53,28 +42,6 @@ export function AuthProvider({ children }) {
 
 export function useAuth() {
   return React.useContext(AuthContext);
-}
-
-export function AuthStatus() {
-  let auth = useAuth();
-  let navigate = useNavigate();
-
-  if (!auth.user) {
-    return <p>You are not logged in.</p>;
-  }
-
-  return (
-    <p>
-      Welcome {auth.user}!{" "}
-      <button
-        onClick={() => {
-          auth.signout(() => navigate("/"));
-        }}
-      >
-        Sign out
-      </button>
-    </p>
-  );
 }
 
 export function RequireAuth({ children }) {
