@@ -6,7 +6,7 @@ import {
 import { AuthProvider, Layout, RequireAuth } from "./navigations";
 import HomeScreen from "./screens/HomeScreen";
 import LoginScreen from "./screens/LoginScreen";
-import { PublicScreen } from "./screens/PublicScreen";
+import PublicScreen  from "./screens/PublicScreen";
 
 export default function App() {
   return (
