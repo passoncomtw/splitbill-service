@@ -1,0 +1,53 @@
+[
+  {
+    "model": "models.users.Users",
+    "data": [
+      {
+        "name": "John March",
+        "line_id": "john_line",
+        "user_tag": "book"
+      },
+      {
+        "name": "Tony Yang",
+        "line_id": "tony_line",
+        "user_tag": "game"
+      },
+      {
+        "name": "Rob T",
+        "line_id": "rob_line",
+        "user_tag": "game"
+      },
+      {
+        "name": "Tom H",
+        "line_id": "tom_line",
+        "user_tag": "sell"
+      }
+    ]
+  },
+  {
+    "model": "models.groups.Groups",
+    "data": [
+      {
+        "name": "Party Night",
+        "user_count": 1
+      },
+      {
+        "name": "Shopping",
+        "user_count": 1
+      }
+    ]
+  },
+  {
+    "model": "models.group_users.Group_Users",
+    "data": [
+      {
+        "user_id": 1,
+        "group_id": 1
+      },
+      {
+        "user_id": 2,
+        "group_id": 2
+      }
+    ]
+  }
+]

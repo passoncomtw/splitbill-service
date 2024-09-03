@@ -7,13 +7,12 @@ from typing import List
 class Users(db.Model):
     __tablename__ = "users"
 
-    id = Column(Integer, primary_key=True)
+    id = Column(Integer, primary_key=True, unique=True)
     name = Column(String, nullable=True)
     line_id = Column(String, nullable=False)
     user_tag = Column(String, nullable=False)
 
     groups = db.relationship("Group_Users", backref="users")
-    transactions = db.relationship("Transactions", backref="users")
     
     def __init__(self, name, line_id, user_tag):
         self.name = name

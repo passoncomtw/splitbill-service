@@ -5,7 +5,7 @@ from sqlalchemy import Column, Integer, String, TIMESTAMP, func
 class Groups(db.Model):
     __tablename__ = "groups"
 
-    id = Column(Integer, primary_key=True)
+    id = Column(Integer, primary_key=True, unique=True)
     name = Column(String)
     user_count = Column(Integer, nullable=False, default=0)
     created_at = Column(TIMESTAMP, server_default=func.now())

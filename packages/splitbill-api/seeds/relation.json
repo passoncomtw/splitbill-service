@@ -1,0 +1,33 @@
+{
+  "model": "models.group_users.Group_Users",
+  "filter": [
+    {
+      "user_id": {
+        "model": "models.users.Users",
+        "filter": {
+          "name": "John March"
+        }
+      },
+      "group_id": {
+        "model": "models.groups.Groups",
+        "filter": {
+          "id": 1
+        }
+      }
+    },
+    {
+      "user_id": {
+        "model": "models.users.Users",
+        "filter": {
+          "name": "Tom H"
+        }
+      },
+      "group_id": {
+        "model": "models.groups.Groups",
+        "filter": {
+          "id": 2
+        }
+      }
+    }
+  ]
+}

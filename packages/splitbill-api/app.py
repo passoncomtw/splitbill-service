@@ -1,9 +1,9 @@
-from flask import Flask, jsonify
+from flask import Flask
 from flask_restx import Api, Resource, Namespace, fields
-from typing import List
 from models import db, migrate, users, groups, group_users, transactions
 from models.users import Users, User_Scheme, Users_Scheme_Adapter
-
+from sqlalchemyseed import load_entities_from_json
+from sqlalchemyseed import Seeder
 
 app = Flask(__name__)
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
@@ -12,7 +12,7 @@ app.config["SQLALCHEMY_DATABASE_URI"] = (
 )
 
 db.init_app(app)
-migrate.init_app(app, db)
+migrate.init_app(app, db, compare_type=False, render_as_batch=False)
 
 api = Api(
     app, version="0.0", title="Split bill API", description="拆帳系統 API", doc="/doc"
@@ -46,14 +46,6 @@ class User_List(Resource):
         line_id = users_api.payload["line_id"]
         user_tag = users_api.payload["user_tag"]
 
-        id = None
-        last_user = Users.query.order_by(Users.id.desc()).first()
-
-        if last_user is None:
-            id = 1
-        else:
-            id = last_user.id + 1
-
         new_user = Users(name=name, line_id=line_id, user_tag=user_tag)
 
         db.session.add(new_user)
@@ -86,6 +78,21 @@ class User(Resource):
 
 
 api.add_namespace(users_api, "/users")
+
+
+@app.cli.command()
+def seed():
+    # load entities
+    entities = load_entities_from_json("./seeds/data.json")
+
+    # Initializing Seeder
+    seeder = Seeder(db.session)
+
+    # Seeding
+    seeder.seed(entities)
+
+    # Committing
+    db.session.commit()  # or seeder.session.commit()
 
 
 @app.cli.command()

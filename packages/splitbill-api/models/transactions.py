@@ -11,6 +11,7 @@ class Transactions(db.Model):
         autoincrement=False,
         default=lambda: str(uuid4()),
         primary_key=True,
+        unique=True
     )
     group_id = Column(Integer,ForeignKey('groups.id'), nullable=False)
     from_user = Column(Integer, ForeignKey("users.id"), nullable=False)
