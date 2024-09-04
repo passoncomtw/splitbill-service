@@ -11,16 +11,17 @@ class Transactions(db.Model):
         autoincrement=False,
         default=lambda: str(uuid4()),
         primary_key=True,
-        unique=True
+        unique=True,
     )
-    group_id = Column(Integer,ForeignKey('groups.id'), nullable=False)
+    group_id = Column(Integer, ForeignKey("groups.id"), nullable=False)
     from_user = Column(Integer, ForeignKey("users.id"), nullable=False)
     to_user = Column(Integer, ForeignKey("users.id"), nullable=False)
     amount = Column(DECIMAL, default=0)
     created_at = Column(TIMESTAMP, server_default=func.now())
     updated_at = Column(TIMESTAMP, server_default=func.now(), onupdate=func.now())
 
-    def __init__(self, group_id, from_user, to_user, amount):
+    def __init__(self, group_id, from_user, to_user, amount, id=None):
+        self.id = id
         self.group_id = group_id
         self.from_user = from_user
         self.to_user = to_user

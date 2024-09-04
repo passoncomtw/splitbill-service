@@ -11,7 +11,8 @@ class Groups(db.Model):
     created_at = Column(TIMESTAMP, server_default=func.now())
     updated_at = Column(TIMESTAMP, server_default=func.now(), onupdate=func.now())
 
-    def __init__(self, name, user_count):
+    def __init__(self, name, user_count, id=None):
+        self.id = id
         self.name = name
         self.user_count = user_count
 

@@ -8,7 +8,7 @@ from sqlalchemyseed import Seeder
 app = Flask(__name__)
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 app.config["SQLALCHEMY_DATABASE_URI"] = (
-    "postgresql://admin:123456@127.0.0.1:5436/splitbill_database"
+    "postgresql://admin:123456@127.0.0.1:5436/splitbill_databas"
 )
 
 db.init_app(app)
@@ -42,11 +42,7 @@ class User_List(Resource):
 
     @users_api.expect(users_model)
     def post(self):
-        name = users_api.payload["name"]
-        line_id = users_api.payload["line_id"]
-        user_tag = users_api.payload["user_tag"]
-
-        new_user = Users(name=name, line_id=line_id, user_tag=user_tag)
+        new_user = Users(**users_api.payload)
 
         db.session.add(new_user)
         db.session.commit()
@@ -83,13 +79,13 @@ api.add_namespace(users_api, "/users")
 @app.cli.command()
 def seed():
     # load entities
-    entities = load_entities_from_json("./seeds/data.json")
-
+    from seeds import data
+    
     # Initializing Seeder
     seeder = Seeder(db.session)
 
     # Seeding
-    seeder.seed(entities)
+    seeder.seed(data)
 
     # Committing
     db.session.commit()  # or seeder.session.commit()

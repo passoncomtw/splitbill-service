@@ -13,8 +13,9 @@ class Users(db.Model):
     user_tag = Column(String, nullable=False)
 
     groups = db.relationship("Group_Users", backref="users")
-    
-    def __init__(self, name, line_id, user_tag):
+
+    def __init__(self, name, line_id, user_tag, id=None):
+        self.id = id
         self.name = name
         self.line_id = line_id
         self.user_tag = user_tag
