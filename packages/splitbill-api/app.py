@@ -8,7 +8,7 @@ from sqlalchemyseed import Seeder
 app = Flask(__name__)
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 app.config["SQLALCHEMY_DATABASE_URI"] = (
-    "postgresql://admin:123456@127.0.0.1:5436/splitbill_databas"
+    "postgresql://admin:123456@127.0.0.1:5436/splitbill_database"
 )
 
 db.init_app(app)
