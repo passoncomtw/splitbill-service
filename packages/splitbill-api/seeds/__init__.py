@@ -1,3 +1,5 @@
+from sqlalchemyseed import Seeder
+
 user_data = {
     "model": "models.users.Users",
     "data": [
@@ -25,3 +27,11 @@ group_users_data = {
 }
 
 data = [user_data, groups_data, group_users_data]
+
+
+def seed_data(db):
+    seeder = Seeder(db.session)
+
+    seeder.seed(data)
+
+    db.session.commit()

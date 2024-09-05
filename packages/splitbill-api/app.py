@@ -2,8 +2,8 @@ from flask import Flask
 from flask_restx import Api, Resource, Namespace, fields
 from models import db, migrate, users, groups, group_users, transactions
 from models.users import Users, User_Scheme, Users_Scheme_Adapter
-from sqlalchemyseed import Seeder
 from config import Config
+from seeds import seed_data
 
 
 def create_app(config):
@@ -58,6 +58,10 @@ def create_app(config):
     class User(Resource):
         def get(self, id):
             user = Users.query.get(id)
+
+            if user == None:
+                return "User not found", 404
+
             user_dict = User_Scheme.model_validate(user).model_dump()
 
             return user_dict
@@ -72,13 +76,7 @@ app = create_app(Config)
 
 @app.cli.command()
 def seed():
-    from seeds import data
-
-    seeder = Seeder(db.session)
-
-    seeder.seed(data)
-
-    db.session.commit()
+    seed_data(db)
 
 
 @app.cli.command()
