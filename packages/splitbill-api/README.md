@@ -8,6 +8,15 @@
 pip install -r requirements.txt
 ```
 
+### Make sure .env
+
+```
+DEBUG=True | False
+SQLALCHEMY_ECHO=True | False
+DB_URL=user:password@url
+DB_NAME=db
+```
+
 ### Start Server
 
 ```sh
