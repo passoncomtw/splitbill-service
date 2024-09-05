@@ -1,0 +1,39 @@
+name: build-and-deploy-splitbill-web-prod
+
+on:
+  pull_request:
+    types: 
+    - closed
+    branches:
+    - main
+    paths:
+    - 'packages/splitbill-web/**'
+    - '.github/workflows/build-and-deploy-splitbill-web-prod.yaml'
+
+jobs:
+  do-deployment:
+    if: github.event.pull_request.merged == true
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Set up Node
+        uses: actions/setup-node@v1
+        with:
+          node-version: 20.9.0
+      - name: Build And Deploy Splitbill Web
+        run: |
+            echo "${{ secrets.SPLITBILL_WEB_ENV }}" > ./packages/splitbill-web/.env
+            cd ./packages/splitbill-web/
+            yarn install --ignore-engines
+            yarn build
+      - name: copy files to target server via scp
+        uses: appleboy/scp-action@v0.1.3
+        with:
+          host: ${{ secrets.WEB_HOST }}
+          username: root
+          port: 22
+          key: ${{ secrets.SSH_KEY_DEV_VALUE }}
+          source: packages/splitbill-web/build/
+          target: /var/www/html/splitbill-web.passon.tw/
+          strip_components: 3

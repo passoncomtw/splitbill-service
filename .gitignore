@@ -6,3 +6,12 @@ __pycache__
 
 # MAC
 .DS_Store
+
+.vscode
+
+#NX
+.nx
+
+.env
+
+package-lock.json
