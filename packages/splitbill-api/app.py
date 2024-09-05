@@ -2,7 +2,6 @@ from flask import Flask
 from flask_restx import Api, Resource, Namespace, fields
 from models import db, migrate, users, groups, group_users, transactions
 from models.users import Users, User_Scheme, Users_Scheme_Adapter
-from sqlalchemyseed import load_entities_from_json
 from sqlalchemyseed import Seeder
 
 app = Flask(__name__)
@@ -59,36 +58,19 @@ class User(Resource):
 
         return user_dict
 
-    # def delete(self, id):
-    #     todo_store.delete(id)
-    #     return "", 204
-
-    # @users_api.expect(todo_model)
-    # def put(self, id):
-    #     todo = todo_store.update(id=id, name=users_api.payload["name"])
-
-    #     if todo is None:
-    #         return "Todo not found", 404
-
-    #     return todo
-
 
 api.add_namespace(users_api, "/users")
 
 
 @app.cli.command()
 def seed():
-    # load entities
     from seeds import data
     
-    # Initializing Seeder
     seeder = Seeder(db.session)
 
-    # Seeding
     seeder.seed(data)
 
-    # Committing
-    db.session.commit()  # or seeder.session.commit()
+    db.session.commit()
 
 
 @app.cli.command()
