@@ -19,3 +19,4 @@ class Config:
 
 class Test_Config(Config):
     TESTING = True
+  

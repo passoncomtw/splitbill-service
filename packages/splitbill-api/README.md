@@ -14,7 +14,7 @@ pip install -r requirements.txt
 DEBUG=True | False
 SQLALCHEMY_ECHO=True | False
 DB_URL=user:password@url
-DB_NAME=db
+DB_NAME=db-name
 ```
 
 ### Start Server
@@ -32,7 +32,7 @@ http://127.0.0.1:5000/doc
 ## Testing
 
 ```sh
-flask test
+pytest
 ```
 
 
@@ -41,4 +41,9 @@ flask test
 ### Init DB
 ```sh
 flask db upgrade
+```
+
+### Seed mock data for DB
+```sh
+flask seed
 ```
