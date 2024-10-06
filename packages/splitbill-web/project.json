@@ -1,0 +1,9 @@
+{
+  "name": "splitbill-web",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "packages/splitbill-web/src",
+  "projectType": "application",
+  "tags": [],
+  "// targets": "to see all targets run: nx show project splitbill-web --web",
+  "targets": {}
+}
