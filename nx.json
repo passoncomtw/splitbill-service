@@ -24,7 +24,8 @@
       "plugin": "@nx/jest/plugin",
       "options": {
         "targetName": "test"
-      }
+      },
+      "exclude": ["packages/splitbill-express-api-e2e/**/*"]
     }
   ],
   "generators": {

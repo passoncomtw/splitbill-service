@@ -9,7 +9,6 @@ import { ChakraProvider } from '@chakra-ui/react'
 const root = ReactDOM.createRoot(document.getElementById('root'));
 const store = configureStore();
 
-console.log("🚀 ~ process.env.REACT_APP_DOMAIN:", process.env.REACT_APP_DOMAIN)
 root.render(
   <Provider store={store}>
     <StrictMode>
