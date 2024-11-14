@@ -1,8 +1,8 @@
-import { connect } from "react-redux";
-import LoginScreen from "./view";
+import { connect } from 'react-redux';
+import LoginScreen from './view';
 
-const mapStateToProps = () => ({aaa: "aaa"});
+const mapStateToProps = () => ({ aaa: 'aaa' });
 
-const mapDispatchToProps = () => ({aaafunc: () => false});
+const mapDispatchToProps = () => ({ aaafunc: () => false });
 
 export default connect(mapStateToProps, mapDispatchToProps)(LoginScreen);
