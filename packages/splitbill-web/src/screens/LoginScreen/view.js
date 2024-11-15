@@ -5,14 +5,16 @@ import 'reactjs-line-login/dist/index.css';
 const LoginScreen = () => {
   const [displayName, setDisplayName] = useState('');
   const { error, isLoggedIn, isReady, liff } = useLiff();
-  console.log("🚀 ~ LoginScreen ~ isReady:", isReady)
-  console.log("🚀 ~ LoginScreen ~ isLoggedIn:", isLoggedIn)
+
 
   useEffect(() => {
     if (!isLoggedIn) return;
 
     (async () => {
       const profile = await liff.getProfile();
+      const token = await liff.getIDToken();
+      console.log("🚀 ~ token:", token)
+      console.log("🚀 ~ profile:", profile)
       setDisplayName(profile.displayName);
     })();
   }, [liff, isLoggedIn]);
