@@ -16,7 +16,6 @@ const LineLogin = ({
   nonce,
   scope,
   setPayload,
-  setIdToken,
   redirectURI
 }) => {
   

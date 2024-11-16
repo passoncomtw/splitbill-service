@@ -2,6 +2,11 @@ import { isEmpty } from "lodash";
 import pick from "lodash/pick";
 import database from "~/database/models";
 
+const getUserFromLineResult = async (token) => {
+  //從 line api 取回 user  資料 https://developers.line.biz/en/docs/line-login/verify-id-token/#get-profile-info-from-id-token
+  return null;
+};
+
 const getUserByUserIdResult = async (userId) => {
   return await database.User.findOne({
     attributes: ["id", "name", "phone", "createdAt"],

@@ -30,19 +30,11 @@ passport.use(
   'app-user',
   new LocalStrategy(
     {
-      usernameField: 'phone',
+      usernameField: 'token',
       passwordField: 'password',
     },
-    async (phone, password, done) => {
-      const user = await getUserWithPasswordResult(phone);
-      const { validated } = validateUserAndPassword(user, password);
-
-      if (!validated) {
-        const message = '使用者不存在或密碼錯誤';
-        const notfoundError = new Error(message);
-        return done(notfoundError, null, { message });
-      }
-
+    async (token, password, done) => {
+      const userResult = await axios
       return done(null, user);
     }
   )

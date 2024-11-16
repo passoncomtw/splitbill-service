@@ -1,8 +1,8 @@
 import Express from "express";
-import { loginRoute } from "./authRouter";
+import { lineLoginRoute } from "./authRouter";
 
 const router = Express.Router();
 
-router.post("/login", loginRoute);
+router.post("/auth/line", lineLoginRoute);
 
 export default router;

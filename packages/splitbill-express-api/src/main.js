@@ -53,11 +53,7 @@ app.use(cookieParser());
 
 app.use("/assets", express.static(path.join(__dirname, "assets")));
 
-app.get("/api", (req, res) => {
-  res.json({ message: "Welcome to shoppingcar-service!!!" });
-});
-
-app.use("/app", appRouter);
+app.use("/", appRouter);
 
 seaggerUI(app)(swaggerOptions);
 
